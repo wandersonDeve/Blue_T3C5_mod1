@@ -5,5 +5,3 @@ frase = str(input('Digite uma frase: ').lower().strip())
 for letra in frase:
     if letra not in 'aeiou':
         print(letra,end='')
-    else:
-        pass
