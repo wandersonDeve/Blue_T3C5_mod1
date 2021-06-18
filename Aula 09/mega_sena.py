@@ -16,7 +16,7 @@ for jg in range (0,qtnd):
             break
     lista_jogos.append(jogo)
 
-print('-'*20)
+print('-'*30)
 for i in range(0,len(lista_jogos)):
     print(f'Jogo #{(i+1):>2}: {sorted(lista_jogos[i])}')
-print('-'*20)
+print('-'*30)
