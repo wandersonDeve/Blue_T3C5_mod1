@@ -8,11 +8,15 @@ qtnd = int(input('Quantos jogos você quer gerar? '))
 
 for jg in range (0,qtnd):
     jogo = []
-    for jg in range(0,6):
-        jogo.append(randint(1,61))
+    while True:
+        numero = randint(1,60)
+        if numero not in jogo:
+            jogo.append(numero)
+        if len(jogo) == 6:
+            break
     lista_jogos.append(jogo)
 
 print('-'*20)
 for i in range(0,len(lista_jogos)):
-    print(f'Jogo #{(i+1):>2}: {lista_jogos[i]}')
+    print(f'Jogo #{(i+1):>2}: {sorted(lista_jogos[i])}')
 print('-'*20)
