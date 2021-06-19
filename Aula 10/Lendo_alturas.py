@@ -34,4 +34,3 @@ for i in cadastros:
         menor = i[1]
 print(f'A maior altura foi de {maior} m')
 print(f'A menor altura foi de {menor} m')
-
