@@ -15,11 +15,15 @@ sim = 0
 
 def verificar_resposta(pergunta):
     while True:
-        ask = str(input(pergunta).strip().lower())
-        if ask[0] in 'sn':
-            break
+        print('=-'*20)
+        ask = str(input(pergunta).strip().lower().replace('ã','a'))
+        if ask in ['sim','nao','n','s']:
+            if ask[0] in 'sn':
+                break
+            else:
+                print('Resposta Invalida')
         else:
-            print('Resposta Invalida')
+            print('\033[1;31mResposta invalida\033[m, responda apenas com SIM ou NAO')
     return ask[0]
 
 perguntas = ['Você telefonou para a vítima? ','Você esteve no local do crime? ','Você mora perto da vítima? ','Você devia para a vítima? ','Você já trabalhou com a vítima? ']
@@ -28,6 +32,7 @@ for pergunta in perguntas:
     if verificar_resposta(pergunta) == 's':
         sim += 1
 
+print('=-'*20)
 if sim == 2:
     print('Não Saia do país, pois você é um SUSPEITO')
 elif 3 <= sim <=4:
