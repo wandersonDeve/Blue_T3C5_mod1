@@ -4,19 +4,21 @@
 # e também quantos são maiores e quantos são menores de idade.
 
 cadastrados = []
+maior = menor = 0
 
 for i in range(0,5):
     lista = []
     print('=-'*20)
-    nome = str(input('Qual seu nome: ').strip())
-    idade = int(input('Qual sua idade: ').strip())
-    lista.append(nome)
-    lista.append(idade)
+    lista.append(str(input('Qual seu nome: ').strip()))
+    lista.append(int(input('Qual sua idade: ').strip()))
     cadastrados.append(lista)
  
 print('=-'*20)
 for i in cadastrados:
     if i[1] >= 18:
         print(f'{i[0]} é maior de idade')
+        maior += 1
     else:
         print(f'{i[0]} é menor de idade')
+        menor += 1
+print(f'O total de pessoas com mais maior de idade {maior} e menores foi de {menor}')
