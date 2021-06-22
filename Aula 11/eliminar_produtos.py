@@ -7,6 +7,8 @@
 
 # O programa deverá mostrar para o cliente a quantidade de itens comprados e o total.
 
+
+
 produtos = {'coca':[15,4.00],'batata':[10,0.65],'pipoca':[4,2.25],'mostarda':[0,6.99],'pizza':[3,18]}
 compras = {}
 

@@ -16,3 +16,7 @@ print(nova_lista1)
 tupla = (1,2,3,4,5)
 lista = [i for i in tupla if i%2== 0]
 print(lista)
+
+import pandas
+
+pandas.DataFrame
