@@ -19,6 +19,7 @@ while True:
     if item == 'sair':
         break
     valor_atual = print(produtos.get(item,'\033[1;31mProduto Inválido\033[m​​'))
+
     if item in produtos.keys():
         qtn_item = int(input(f'Quantos {item} você deseja: ').strip())
 
@@ -31,14 +32,19 @@ while True:
             compras[item] = qtn_item
             produtos[item][0] -= qtn_item
             print(produtos)
+
 soma = 0
+
 print('=-'*30)
 print('\nSua lista de compras foi: ')
 print('--'*30)
+
 print(f"\033[1m{'Itens':<8}    {'Qtn':>3}   {'preço':>5}      {'Total':>5}\033[m")
 print('--'*30)
+
 for k,v in compras.items():
     print(f'{k.capitalize():<8} -> {v:>3} * {produtos[k][1]:>5.2f}  =  R$ {v*produtos[k][1]:>5.2f}')
     soma += v*produtos[k][1]
+    
 print('--'*30)
 print(f'{"Total a pagar":<27} R$ {soma:>5.2f}\n\n')
