@@ -1,4 +1,3 @@
-
 from datetime import date
 
 joao = maria = jose = 0
@@ -28,5 +27,3 @@ while True:
     ctrl = str(input('Deseja continuar ? [N,S] ').upper())
     if ctrl == 'N':
         break
-
-print(maria)
