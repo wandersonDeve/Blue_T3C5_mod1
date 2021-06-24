@@ -1,6 +1,9 @@
 from datetime import date
 from time import sleep
 
+def linha():
+    return print('=-'*30)
+
 def validacao_ano_voto(pergunta):
     '''
     :Função validacao_ano_voto: Valida se o ano e o voto é um numero inteiro
@@ -12,6 +15,7 @@ def validacao_ano_voto(pergunta):
     '''
     valor = 0
     while True:
+        linha()
         n = str(input(pergunta)).strip()
         if n.isnumeric():
             valor = int(n)
@@ -35,6 +39,8 @@ def autoriza_voto(ano,voto):
     :param voto: opção de voto do usuario
     :return: retorna se o usuario esta apto para votar
     '''
+    print('Validando as informações ...')
+    sleep(1.5)
     situacao = True
     idade = date.today().year - ano
     if 18 <= idade < 70:
@@ -54,6 +60,7 @@ def votacao(autorizacao,voto):
     :param voto: opção do voto do usuario
     :return: ---- sem retorno ----
     '''
+    sleep(1)
     if voto > 4:
         indice = 4
     else:
@@ -64,6 +71,7 @@ def votacao(autorizacao,voto):
         print('\033[1;32mSeu voto foi computado com sucesso.\033[m')  
     else:
         print('\033[1;31mVocê ainda não tem idade para votar\033[m')
+    sleep(1)
 
 def continuar_votacao(condição_de_parada):
     '''
@@ -72,6 +80,7 @@ def continuar_votacao(condição_de_parada):
     '''
     continuar = ''
     while True:
+        linha()
         resposta = str(input(condição_de_parada)).strip().replace('ã','a').capitalize()
         if resposta in ('Sim','Nao','S','N'):
             continuar = resposta[0]
@@ -92,17 +101,20 @@ while True:
         break
 
 total_votos = 0
-vencedor = ''
-
+vencedor = 'Não houve vencedor'
+linha()
 print(f"{'Candidato':<10}{'Votos':>5}")
 for i in resultado:
+    sleep(0.8)
     print(f"{i['nome']:<10}{i['votos']:>4}")
-    if i > 3 :
+    if resultado.index(i) < 3 :
         if i['votos'] > total_votos:
             total_votos = i['votos']
             vencedor = i['nome']
-
+linha()
 print(f'O candidato vencedor com {total_votos} votos foi ', end='')
 for i in range(0,7):
-    print('.',end=' ')
+    sleep(0.6)
+    print('.',end=' ',flush=True)
 print(f'{vencedor.upper()}')
+linha()
