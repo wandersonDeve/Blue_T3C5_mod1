@@ -31,7 +31,6 @@ def validacao_ano_voto(pergunta):
 
 def autoriza_voto(ano,voto):
     '''
-
     :param ano: ano de nascimento do usuario
     :param voto: opção de voto do usuario
     :return: retorna se o usuario esta apto para votar
@@ -51,7 +50,6 @@ def autoriza_voto(ano,voto):
 
 def votacao(autorizacao,voto):
     '''
-
     :param autorizacao: Fornece valor Booleano para a validação do voto
     :param voto: opção do voto do usuario
     :return: ---- sem retorno ----
@@ -64,7 +62,6 @@ def votacao(autorizacao,voto):
 
 def continuar_votacao(condição_de_parada):
     '''
-
     :param condição_de_parada: Condição para parar de aceitar novas pessoas para votar
     :return: retorna S = sim e N = não, para o programa
     '''
@@ -73,6 +70,7 @@ def continuar_votacao(condição_de_parada):
         resposta = str(input(condição_de_parada)).strip().replace('ã','a').capitalize()
         if resposta in ('Sim','Nao','S','N'):
             continuar = resposta[0]
+            break
         else:
             print('Valor de entrada invalido')
     return continuar
