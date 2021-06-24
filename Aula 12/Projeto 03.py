@@ -54,9 +54,14 @@ def votacao(autorizacao,voto):
     :param voto: opção do voto do usuario
     :return: ---- sem retorno ----
     '''
+    if voto > 4:
+        indice = 4
+    else:
+        indice = voto-1
+
     if autorizacao:
-        print('\033[1;32mSeu voto foi computado com sucesso.\033[m')
-        
+        resultado[indice]['votos'] += 1
+        print('\033[1;32mSeu voto foi computado com sucesso.\033[m')  
     else:
         print('\033[1;31mVocê ainda não tem idade para votar\033[m')
 
@@ -75,7 +80,7 @@ def continuar_votacao(condição_de_parada):
             print('Valor de entrada invalido')
     return continuar
 
-resultado = {}
+resultado = [{'nome':'Joao','votos':0},{'nome':'Maria','votos':0},{'nome':'Jose','votos':0},{'nome':'Branco','votos':0},{'nome':'Nulo','votos':0}]
 
 while True:
     ano_nasci = validacao_ano_voto('Qual o ano de nascimento: ')
@@ -85,3 +90,19 @@ while True:
     ctrl = continuar_votacao('Deseja continuar ? [N,S] ')
     if ctrl == 'N':
         break
+
+total_votos = 0
+vencedor = ''
+
+print(f"{'Candidato':<10}{'Votos':>5}")
+for i in resultado:
+    print(f"{i['nome']:<10}{i['votos']:>4}")
+    if i > 3 :
+        if i['votos'] > total_votos:
+            total_votos = i['votos']
+            vencedor = i['nome']
+
+print(f'O candidato vencedor com {total_votos} votos foi ', end='')
+for i in range(0,7):
+    print('.',end=' ')
+print(f'{vencedor.upper()}')
