@@ -1,5 +1,5 @@
 from validadorDeNumero import verificaNumero
 
-n = verificaNumero('Digite um numero: ')
+numero = verificaNumero('Digite um numero: ')
 
-print(n)
+print(f'O numero digitado foi {numero}')

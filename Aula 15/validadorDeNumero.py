@@ -1,4 +1,8 @@
 def verificaNumero(pergunta):
+    '''
+    :parametro: Pergunta -- > recebe a pergunta que receberá um numero pelo usuario
+    :variacel: resultado -- > Variavel com o valor passado pelo usuario em Int ou Float
+    '''
     tam = len(pergunta)//2
     resultado = 0
     while True:
