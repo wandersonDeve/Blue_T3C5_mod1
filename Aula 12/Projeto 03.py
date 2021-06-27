@@ -73,11 +73,33 @@ def votacao(autorizacao,voto):
         print('\033[1;31mVocê ainda não tem idade para votar\033[m')
     sleep(1)
 
+    ctrl = continuar_votacao('Deseja continuar ? [N,S] ')
+    if ctrl == 'N':
+        total_votos = 0
+        vencedor = 'Não houve vencedor'
+        linha()
+        print(f"{'Candidato':<10}{'Votos':>5}")
+        for i in resultado:
+            sleep(0.8)
+            print(f"{i['nome']:<10}{i['votos']:>4}")
+            if resultado.index(i) < 3 :
+                if i['votos'] > total_votos:
+                    total_votos = i['votos']
+                    vencedor = i['nome']
+        linha()
+        print(f'O candidato vencedor com {total_votos} votos foi ', end='')
+        for i in range(0,7):
+            sleep(0.6)
+            print('.',end=' ',flush=True)
+        print(f'{vencedor.upper()}')
+        linha()
+
 def continuar_votacao(condição_de_parada):
     '''
     :param condição_de_parada: Condição para parar de aceitar novas pessoas para votar
     :return: retorna S = sim e N = não, para o programa
     '''
+    global continuar
     continuar = ''
     while True:
         linha()
@@ -95,26 +117,5 @@ while True:
     ano_nasci = validacao_ano_voto('Qual o ano de nascimento: ')
     voto_escolha = validacao_ano_voto('Qual o seu voto:\n\033[1;33m[ 1 ] - Joao\n[ 2 ] - Maria\n[ 3 ] - Jose\n[ 4 ] - Branco\033[m\nSeu voto é: ')
     autoriza_voto(ano_nasci,voto_escolha)
-
-    ctrl = continuar_votacao('Deseja continuar ? [N,S] ')
-    if ctrl == 'N':
+    if continuar == 'N':
         break
-
-total_votos = 0
-vencedor = 'Não houve vencedor'
-linha()
-print(f"{'Candidato':<10}{'Votos':>5}")
-for i in resultado:
-    sleep(0.8)
-    print(f"{i['nome']:<10}{i['votos']:>4}")
-    if resultado.index(i) < 3 :
-        if i['votos'] > total_votos:
-            total_votos = i['votos']
-            vencedor = i['nome']
-linha()
-print(f'O candidato vencedor com {total_votos} votos foi ', end='')
-for i in range(0,7):
-    sleep(0.6)
-    print('.',end=' ',flush=True)
-print(f'{vencedor.upper()}')
-linha()
