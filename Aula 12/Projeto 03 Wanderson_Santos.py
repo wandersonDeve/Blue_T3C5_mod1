@@ -120,7 +120,7 @@ def continuar_votacao(condição_de_parada):
             continuar = resposta[0]
             break
         else:
-            print('Valor de entrada invalido')
+            print('\033[1;31mValor de entrada invalido\033[m')
     return continuar
 
 resultado = [{'nome':'Joao','votos':0},{'nome':'Maria','votos':0},{'nome':'Jose','votos':0},{'nome':'Branco','votos':0},{'nome':'Nulo','votos':0}]
