@@ -1,5 +1,6 @@
 from datetime import date
 from time import sleep
+import os
 
 def linha():
     return print('=-'*30)
@@ -71,7 +72,8 @@ def votacao(autorizacao,voto):
         print('\033[1;32mSeu voto foi computado com sucesso.\033[m')  
     else:
         print('\033[1;31mVocê ainda não tem idade para votar\033[m')
-    sleep(1)
+    sleep(2)
+    os.system('cls' if os.name == 'nt' else 'clear')
 
     ctrl = continuar_votacao('Deseja continuar ? [N,S] ')
     if ctrl == 'N':
