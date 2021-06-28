@@ -77,6 +77,7 @@ def votacao(autorizacao,voto):
     if ctrl == 'N':
         total_votos = 0
         vencedor = 'Não houve vencedor'
+        empate = []
         linha()
         print(f"{'Candidato':<10}{'Votos':>5}")
         for i in resultado:
@@ -86,12 +87,21 @@ def votacao(autorizacao,voto):
                 if i['votos'] > total_votos:
                     total_votos = i['votos']
                     vencedor = i['nome']
+                empate.append(i['votos'])
+            for i in empate:
+                if empate.count(max(empate)) != 1:
+                    total_votos = 0
+                    vencedor = 'Não houve vencedor'
+
         linha()
-        print(f'O candidato vencedor com {total_votos} votos foi ', end='')
-        for i in range(0,7):
-            sleep(0.6)
-            print('.',end=' ',flush=True)
-        print(f'{vencedor.upper()}')
+        if total_votos != 0:
+            print(f'O candidato vencedor com {total_votos} votos foi ', end='')
+            for i in range(0,7):
+                sleep(0.6)
+                print('.',end=' ',flush=True)
+            print(f'{vencedor.upper()}')
+        else:
+            print('EMPATE NAS VOTAÇÕES, PARECE QUE TEREMOS SEGUNDO TURNO')
         linha()
 
 def continuar_votacao(condição_de_parada):
