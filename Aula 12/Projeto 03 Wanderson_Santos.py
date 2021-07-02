@@ -131,3 +131,4 @@ while True:
     autoriza_voto(ano_nasci,voto_escolha)
     if continuar == 'N':
         break
+    
