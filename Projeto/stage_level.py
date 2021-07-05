@@ -30,10 +30,10 @@ def caminhando(cachoeira=True):
     audiJogo(1,True)
     for i in opc[indice]:
         print(f'{i}', end='', flush=True)
-        sleep(0.2)
+        sleep(0.1)
     audiJogo(0)
 
-#   CACHOEIRA OPÇÕES
+#   CACHOEIRA OPÇÃO
 def opcoesDaCachoeira(opc):
     os.system('cls' if os.name == 'nt' else 'clear')
     if opc == '1':
@@ -43,8 +43,8 @@ def opcoesDaCachoeira(opc):
         chance = (randint(1,10))
         if chance == 7:
             for i in 'Olhando bem nas pedras atras da cachoeira\nVocê visualiza o que parece ser uma passagem para uma caverna ...':
-                print(f'\n\n{i}', end='', flush=True)
-                sleep(0.1)
+                print(f'{i}', end='', flush=True)
+                sleep(0.05)
             while True:
                 choice = str(input('Deseja explorar a caverna ...\nSim ou Não - > ').lower().replace('ã','a'))
                 if choice not in ['sim','nao','s','n']:
@@ -57,4 +57,20 @@ def opcoesDaCachoeira(opc):
                     print('Voltando ...')
                     sleep(1)
                     return False
-                
+    elif opc == '2':
+        peixe = 0
+        for i in 'Voce esta pescando.....':
+            print(f'{i}', end='', flush=True)
+            sleep(0.1)
+        chance = (randint(1,10))
+        if chance in [2,5]:
+            peixe = 2
+            print('Parabens você pegou 2 peixes.')
+        elif chance in [1,3,7]:
+            peixe = 1
+            print('Você pegou 1 peixe')
+        else:
+            print('Infelizmente não foi dessa vez')
+        sleep(1)
+        return peixe
+    
