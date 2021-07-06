@@ -62,8 +62,11 @@ class Personagem:
         print(emojize(f':alarm_clock: {relogio}', use_aliases=True),end='    ')
         print(emojize(f':calendar: Dia {relogio.dia}', use_aliases=True),end='    ')
         print(emojize(f':dollar: R$ {personagem.dinheiro}', use_aliases=True))
-        print(casa.itens)
-        print("--"*20)
+        print('==='*30)
+        for k,v in casa.itens.items():
+            if v != 0:
+                print(emojize(f'{k} = {v}',use_aliases=True),end='  ')
+        print('\n'+'==='*30)
         print("Você precisa cortar lenha antes das 12hs.")
         print(personagem)
         print("--"*20)
@@ -71,7 +74,7 @@ class Personagem:
 #   CLASSE QUE MOSTRA O QUE TEM EM SUA DISPENSA
 class Casa:
     def __init__(self):
-        self.itens = {'lanterna':0,'corda':0,'peixe':1,'gancho':0,'lenha':2,'ouro':0,'comida':0}
+        self.itens = {':flashlight:':1,':knot:':1,':fish:':1,':hook:':1,':wood:':2,':coin:':1,':curry:':1}
 
 #   AÇÕES DO USUARIO
 if __name__ == "__main__":
@@ -80,12 +83,12 @@ if __name__ == "__main__":
     casa = Casa()
 
     #   INTRODUÇÃO DA HISTORIA
-    # stage_level.audiJogo(0,True)
+    # audiJogo(0,True)
     # msg = atualStage(personagem.fase)
     # for i in msg:
     #     print(f'{i}', end='',flush=True)
-    #     sleep(0.1)
-    # stage_level.audiJogo(0)
+    #     sleep(0.05)
+    # audiJogo(0)
     # personagem.viuMensagem = True
     # sleep(1)
     # os.system('cls' if os.name == 'nt' else 'clear')
@@ -112,7 +115,7 @@ if __name__ == "__main__":
                     personagem.banho = False
                     relogio.avancaTempo(20)
                 elif opc == '2' and personagem.pescar == True:
-                    casa.itens['peixe'] += opcoesDaCachoeira(opc)
+                    casa.itens[':fish:'] += opcoesDaCachoeira(opc)
                     personagem.pescar = False
                     relogio.avancaTempo(20)
                 elif opc == '3':
@@ -126,11 +129,11 @@ if __name__ == "__main__":
 
         #   OPÇÃO DE PREPARAR A COMIDA
         elif opcao == "2":
-            print("Você tem peixe e lenha\nPreparando sua comida" if casa.itens['peixe'] > 0 and casa.itens['lenha'] >= 2 else "Você ou não tem peixe ou não tem lenha suficiente")
-            if casa.itens['peixe'] > 0 and casa.itens['lenha'] >= 2:
-                casa.itens['peixe'] -= 1
-                casa.itens['lenha'] -= 2
-                casa.itens['comida'] += 1
+            print("Você tem peixe e lenha\nPreparando sua comida" if casa.itens[':fish:'] > 0 and casa.itens[':wood:'] >= 2 else "Você ou não tem peixe ou não tem lenha suficiente")
+            if casa.itens[':fish:'] > 0 and casa.itens[':wood:'] >= 2:
+                casa.itens[':fish:'] -= 1
+                casa.itens[':wood:'] -= 2
+                casa.itens[':curry:'] += 1
             relogio.avancaTempo(30)
             sleep(3)
        
@@ -144,9 +147,9 @@ if __name__ == "__main__":
 
         #   OPÇÃO ONDE ELE COME O ALIMENTO PREPARADO
         elif opcao == "4":
-            if casa.itens['comida'] > 0:
+            if casa.itens[':curry:'] > 0:
                 personagem.fome = False
-                casa.itens['comida'] -= 1
+                casa.itens[':curry:'] -= 1
                 relogio.avancaTempo(15)
                 print('Você comeu e esta bem alimentado')
             else:
@@ -194,25 +197,30 @@ if __name__ == "__main__":
             print("-=-=-")
             sleep(3)
             relogio.avancaTempo(360)
-            casa.itens['lenha'] += lenha
+            casa.itens[':wood:'] += lenha
             personagem.banho = True
             personagem.sujo = True
             personagem.lenha = True
 
             # OPÇÃO QUANDO UM COMPRADOR APARECER
-            comprador = 2
+            comprador = randint(1,4)
             if comprador == 2:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 vender = randint(1,5)
                 valor = choice([20,30,40])
-                print(casa.itens)
                 comprar = True
                 while comprar:
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print('==='*30)
+                    for k,v in casa.itens.items():
+                        if v != 0:
+                            print(emojize(f'{k} = {v}',use_aliases=True),end='  ')
+                    print('\n'+'==='*30)
                     print('Uma pessoa da cidade esta a sua procura e quer comprar lenha....')
                     escolha = input(f'Deseja vender {vender} lenha\n1 - Vender\n2 - Não vender\nEscolha sua ação: ')
-                    if escolha == '1':
+                    if escolha == '1' and casa.itens[':wood:'] >= vender:
                         print(f'Você vender {vender} a {valor:.2f} cada e recebeu {vender*valor:.2f}')
-                        casa.itens['lenha'] -= vender
+                        casa.itens[':wood:'] -= vender
                         personagem.dinheiro += vender*valor
                         sleep(2)
                         comprar = False
@@ -221,11 +229,8 @@ if __name__ == "__main__":
                         sleep(1)
                         comprar = False
                     else:
-                        pass
-            # personagem.dinheiro += recebido
-            # personagem.dormir()
-            # relogio = Relogio()
-            # dia+=1
+                        print('Parece que digitou uma opção invalida ou não tem lenha o suficiente para vender')
+                        sleep(2)
        
         #   OPÇÃO DE SAIR DO PROGRAMA
         elif opcao == "0":
