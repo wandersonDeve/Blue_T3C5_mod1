@@ -34,13 +34,17 @@ class Personagem:
         self.sujo = True
         self.fome = True
         self.lenha = False
-        self.dinheiro = 0
+        self.dinheiro = 1000 #### MODIFICAR VALOR NO FINAL DO CODIGO ####
         self.fase = 0
         self.banho = True
         self.viuMensagem = False
         self.cachoeira = False # essa opção seria para retornar uma ação dentro da cachoeira
         self.pescar = True
         self.dormiu = True
+        self.vidas = 5
+        self.aluguel = False
+        self.teorAlcolico = 0
+        self.bebado = False
     
     def __str__(self):
         return ("\033[1;31mVocê está sujo\033[m" if self.sujo else "\033[1;33mVocê está limpo\033[m")+", "+("\033[1;31mcom fome\033[m" if self.fome else "\033[1;33msem fome\033[m")+" e "+("\033[1;33mcortou lenha.\033[m" if self.lenha else "\033[1;31mnão cortou lenha.\033[m")
@@ -54,14 +58,17 @@ class Personagem:
         self.banho = True
         self.cachoeira = False # essa opção seria para retornar uma ação dentro da cachoeira
         self.pescar = True
-        self.dormiu = True   
+        self.dormiu = True
+        self.teorAlcolico = 0
+        self.bebado = False
 
     #   FUNÇÃO COM STATUS DO PERSONAGEM
     def status(self):
-        print("--"*20)
+        print("--"*30)
         print(emojize(f':alarm_clock: {relogio}', use_aliases=True),end='    ')
         print(emojize(f':calendar: Dia {relogio.dia}', use_aliases=True),end='    ')
-        print(emojize(f':dollar: R$ {personagem.dinheiro}', use_aliases=True))
+        print(emojize(f':dollar: R$ {personagem.dinheiro}', use_aliases=True), end='    ')
+        print(emojize(f'Vidas: ' + ':red_heart: '*personagem.vidas,use_aliases=True))
         print('==='*30)
         for k,v in casa.itens.items():
             if v != 0:
@@ -74,7 +81,7 @@ class Personagem:
 #   CLASSE QUE MOSTRA O QUE TEM EM SUA DISPENSA
 class Casa:
     def __init__(self):
-        self.itens = {':flashlight:':1,':knot:':1,':fish:':1,':hook:':1,':wood:':2,':coin:':1,':curry:':1}
+        self.itens = {':flashlight:':0,':knot:':0,':fish:':1,':hook:':0,':wood:':2,':coin:':0,':curry:':0,':chopsticks:':0}
 
 #   AÇÕES DO USUARIO
 if __name__ == "__main__":
@@ -95,17 +102,27 @@ if __name__ == "__main__":
 
     #   REPETIÇÃO DAS AÇÕES UTILZADAS PELO USUARIO
     while True:
+        dia_controle = 1
+        if dia_controle != relogio.dia and personagem.aluguel == True:
+            personagem.dinheiro -= 200
+            dia_controle = relogio.dia
+
+        if personagem.vidas == 0:
+            print('\033[1;31mVOCÊ PERDEU\033[m, INICIE NOVAMENTE E COMECE UMA NOVA AVENTURA')
+            break
         personagem.status()
         print("Ações:")
-        opcao = input('1 - Ir para Cachoeira\n2 - Fritar Peixe\n4 - Comer\n' + ('7 - Cortar lenha' if personagem.lenha == False else 'Desabilitado por hoje') + '\n0 - Sair do jogo\nEscolha sua ação: ')
-        if opcao == "1":
+        opcao = input('1 - Ir para Cachoeira\n2 - Fritar Peixe\n3 - Ir para cidade\n4 - Comer\n' + ('7 - Cortar lenha' if personagem.lenha == False else 'Desabilitado por hoje') + '\n0 - Sair do jogo\nEscolha sua ação: ')
+
+        #   OPÇÃO DA CACHOEIRA
+        if opcao == '1':
             relogio.avancaTempo(20)
 
             # REPETIÇÃO DE ATOS NA CACHOEIRA
-            opn = ''
             caminhando()
             audiJogo(2,True)
-            while opn != '3':
+            opc = ''
+            while opc != '3':
                 os.system('cls' if os.name == 'nt' else 'clear')
                 personagem.status()
                 opc = input(('1 - Tomar banho\n' if personagem.banho else '\033[1;31mO banho esta desabilitada por enquanto\033[m\n') + ('2 - Pescar' if personagem.pescar else '\033[1;31mA pescaria esta desabilitada por hoje\033[m') + '\n3 - Voltar para casa\nEscolha sua ação: ')
@@ -128,7 +145,7 @@ if __name__ == "__main__":
                     relogio.avancaTempo(5)
 
         #   OPÇÃO DE PREPARAR A COMIDA
-        elif opcao == "2":
+        elif opcao == '2':
             print("Você tem peixe e lenha\nPreparando sua comida" if casa.itens[':fish:'] > 0 and casa.itens[':wood:'] >= 2 else "Você ou não tem peixe ou não tem lenha suficiente")
             if casa.itens[':fish:'] > 0 and casa.itens[':wood:'] >= 2:
                 casa.itens[':fish:'] -= 1
@@ -137,16 +154,12 @@ if __name__ == "__main__":
             relogio.avancaTempo(30)
             sleep(3)
        
-        # elif opcao == "3" :
-        #     if personagem.dinheiro >= 15:
-        #         personagem.dinheiro -= 15
-        #         cafe_da_manha = True
-        #     else:
-        #         print("O café da manhã custa 15 reais, você não tem dinheiro suficiente.")
-        #     relogio.avancaTempo(5)
+        #   OPÇÃO DE IR PARA CIDADE
+        elif opcao == '3':
+            casa.itens,personagem = cidade(casa.itens,personagem)
 
         #   OPÇÃO ONDE ELE COME O ALIMENTO PREPARADO
-        elif opcao == "4":
+        elif opcao == '4':
             if casa.itens[':curry:'] > 0:
                 personagem.fome = False
                 casa.itens[':curry:'] -= 1
@@ -157,7 +170,7 @@ if __name__ == "__main__":
                 relogio.avancaTempo(5)
             sleep(1)
        
-        # elif opcao == "5":
+        # elif opcao == '5':
         #     if casa.remedios > 0:
         #         casa.remedios -= 1
         #         personagem.medicado = True
@@ -165,7 +178,7 @@ if __name__ == "__main__":
         #         print("Não tem remédio na sua casa")
         #     relogio.avancaTempo(5)
 
-        # elif opcao == "6":
+        # elif opcao == '6':
         #     if personagem.dinheiro >= 20:
         #         casa.remedios += 10
         #         personagem.dinheiro -= 20
@@ -175,7 +188,7 @@ if __name__ == "__main__":
         #         relogio.avancaTempo(5)
 
         #   AÇÕES QUANDO O USUARIO ESCOLHER CORTAR A LENHA
-        elif opcao == "7" and personagem.lenha == False:
+        elif opcao == '7' and personagem.lenha == False:
             print("-=-=-")
             print("Você foi cortar madeira.")
             print(personagem)
@@ -184,6 +197,10 @@ if __name__ == "__main__":
             if not personagem.dormiu:
                 print("Como você não dormiu, acabou pegando no sono antes de cortar a lenha.")
                 lenha = 0
+            elif personagem.bebado:
+                print('Você estava muito bebado e não produziu nada, e nem se lembra de como voltou para casa')
+                lenha = 0
+                personagem.dormir()
             elif personagem.sujo:
                 print("Como você estava sujo, e acabou atraindo a atenção de alguns animais que nao deixaram você cortar a madeira")
                 lenha = 0
@@ -233,10 +250,13 @@ if __name__ == "__main__":
                         sleep(2)
        
         #   OPÇÃO DE SAIR DO PROGRAMA
-        elif opcao == "0":
+        elif opcao == '0':
             break
+       
         else:
             print("Opção inválida!")
             relogio.avancaTempo(5)
         sleep(1)
         os.system('cls' if os.name == 'nt' else 'clear')
+
+print('Jogo produzido por:\nDanusa\nNilson\nVinicius\nWanderson')
