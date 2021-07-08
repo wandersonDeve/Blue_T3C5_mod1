@@ -4,14 +4,19 @@ from random import randint,choice
 from emoji import emojize
 import os
 
-def status_personagem(inventario):
+def status_personagem(inventario,personagem):
     os.system('cls' if os.name == 'nt' else 'clear')
+    print("--"*30)
+    print(emojize(f':dollar: R$ {personagem.dinheiro}', use_aliases=True), end='    ')
+    print(emojize(f'Vidas: ' + '\033[1;31m:red_heart:\033[m '*personagem.vidas,use_aliases=True))
     print('==='*30)
     for k,v in inventario.items():
         if v != 0:
             print(emojize(f'{k} = {v}',use_aliases=True),end='  ')
     print('\n'+'==='*30)
-
+    print("Você precisa cortar lenha antes das 12hs.")
+    print(personagem)
+    print("--"*20)
 
 #   TRILHA SONORA E AUDIOS DO JOGO
 def audiJogo(musica,play=False):
@@ -43,66 +48,65 @@ def caminhando(cachoeira=True):
         sleep(0.1)
     audiJogo(0)
 
-#   CACHOEIRA OPÇÃO
-def opcoesDaCachoeira(opc):
-    os.system('cls' if os.name == 'nt' else 'clear')
-    if opc == '1':
-        for i in 'Voce esta tomando um bom banho.....':
-            print(f'{i}', end='', flush=True)
-            sleep(0.1)
-        chance = (randint(1,10))
-        if chance == 7:
-            for i in 'Olhando bem nas pedras atras da cachoeira\nVocê visualiza o que parece ser uma passagem para uma caverna ...':
-                print(f'{i}', end='', flush=True)
-                sleep(0.05)
-            while True:
-                choice = str(input('Deseja explorar a caverna ...\nSim ou Não - > ').lower().replace('ã','a'))
-                if choice not in ['sim','nao','s','n']:
-                    print('opção Invalida')
-                elif choice in ['sim','s']:
-                    print('Bem vindo a caverna')
-                    sleep(1)
-                    return True
-                else:
-                    print('Voltando ...')
-                    sleep(1)
-                    return False
-    elif opc == '2':
-        peixe = 0
-        for i in 'Voce esta pescando.....':
-            print(f'{i}', end='', flush=True)
-            sleep(0.1)
-        chance = (randint(1,10))
-        if chance in [2,5]:
-            peixe = 2
-            print('Parabens você pegou 2 peixes.')
-        elif chance in [1,3,7]:
-            peixe = 1
-            print('Você pegou 1 peixe')
-        else:
-            print('Infelizmente não foi dessa vez')
-        sleep(1)
-        return peixe
-
 #   FUNÇÃO PARA A FUTURA LOJA DO PERSONAGEM
 def loja_Vazia(inventario,personagem):
     aluguel_loja = 200
-    while True:
-        status_personagem(inventario)
-        print(f'Esta loja esta disponivel para alugar por {aluguel_loja} o dia')
-        print('Ações')
-        print('1 - alugar')
-        print('2 - sair')
-        opcao = input('escolha sua ação: ')
-        if opcao == '1':
-            if personagem.dinheiro < aluguel_loja:
-                print('voce nao tem dinheiro sufisciente para alugar')
-            elif opcao == '1':
-                personagem.aluguel = True
-        elif opcao == '2':
-            return inventario,personagem
-        else:
-            print('\033[1;31mOpção Inválida\033[m')
+    itens = ['peixe','madeira','ouro']
+    if personagem.aluguel:
+        while True:
+            status_personagem(inventario,personagem)
+            for i in itens:
+                print(f'{i}',end=' ')
+            print()
+            venda = input('Digite o nome do item que gostaria de colocar a venda, ou digite "sair": ')
+            qtd = int(input('qual quantidade gostaria de vender: '))
+            if venda == itens[0] and inventario[':fish:'] >= qtd :
+                chance = randint(70,100)
+                inventario[':fish:'] -= qtd
+                valor = chance * qtd
+                personagem.dinheiro += valor
+                print(f'Você vendeu {qtd} {venda} por {chance} e ganhou {valor}')
+                sleep(2)
+            elif venda == itens[1] and inventario[':wood:'] >=qtd:
+                chance = randint(90,120)
+                inventario[':wood:'] -=qtd
+                valor = chance * qtd
+                personagem.dinheiro += valor
+                print(f'Você vendeu {qtd} {venda} por {chance} e ganhou {valor}')
+                sleep(2)
+            elif venda == itens[2] and inventario[':coin:'] >= qtd:
+                chance = randint(3000,5000)
+                inventario[':coin:'] -= qtd
+                valor = chance * qtd
+                personagem.dinheiro += valor
+                print(f'Você vendeu {qtd} {venda} por {chance} e ganhou {valor}')
+                sleep(2)
+            elif venda == 'sair':
+                return 
+            else:
+                print('\033[1;31mOpção Inválida\033[m')
+                sleep(1)
+    else:
+        while True:
+            status_personagem(inventario,personagem)
+            print(f'Esta loja esta disponivel para alugar por {aluguel_loja} o dia')
+            print('Ações')
+            print('1 - alugar')
+            print('2 - sair')
+            opcao = input('escolha sua ação: ')
+            if opcao == '1':
+                if personagem.dinheiro < aluguel_loja:
+                    print('voce nao tem dinheiro sufisciente para alugar')
+                    sleep(2)
+                else:
+                    print('Você comprou a loja e pagará 200,00 por dia')
+                    personagem.aluguel = True    
+                    sleep(2)    
+            elif opcao == '2':
+                return inventario,personagem   
+            else:
+                print('\033[1;31mOpção Inválida\033[m') 
+                sleep(1) 
 
 #   FUNÇÃO COM A OPÇÃO DA MERCEARIA
 def mercearia(inventario,personagem):
@@ -116,38 +120,49 @@ def mercearia(inventario,personagem):
         sleep(1)
         while True:
             index = 0
-            status_personagem(inventario)
+            status_personagem(inventario,personagem)
             print('Digite o numero do item que deseja comprar, ou digite "sair", para deixar a loja: ')
-            print(f"{'Numero':<6}   {'Item':<4} {'Quantidade':<15}{'Valor':<6}")
+            print(f"{'Numero':^8} {'Valor':^8} {'Quantidade':^13} {'Item':^8}")
             for k,v in itens.items():
-                print(emojize(f'{index+1:<6}   {k:<4} {v:<15}{valores[index]:<6.2f}',use_aliases=True ))
+                print(emojize(f'{index+1:^8} {valores[index]:^8.2f} {v:^15} {k:^8}',use_aliases=True ))
                 index += 1
             opcao = input('opção: ').lower().strip()
             if opcao == '1':
                 if personagem.dinheiro < valores[0]:
                     print('Voce nao tem',valores[0], 'para comprar esse item')
+                    sleep(2)
+
                 else:
                     print('Compra efetuada com sucesso.\nVocê adquiriu uma Lanterna')
                     inventario[':flashlight:'] += 1
+                    itens[':flashlight:'] -= 1
                     personagem.dinheiro -= valores[0]
+                    sleep(2)
             elif opcao == '2':
                 if personagem.dinheiro < valores[1]:
                     print('Voce nao tem',valores[1], 'para comprar esse item')
+                    sleep(2)
                 else:
                     print('Compra efetuada com sucesso.\nVocê adquiriu uma Gancho')
                     inventario[':hook:'] += 1
+                    itens[':hook:'] -= 1
                     personagem.dinheiro -= valores[1]
+                    sleep(2)
             elif opcao == '3':
                 if personagem.dinheiro < valores[2]:
                     print('Voce nao tem',valores[2], 'para comprar esse item')
+                    sleep(2)
                 else:
                     print('Compra efetuada com sucesso.\nVocê adquiriu uma Corda')
                     inventario[':knot:'] += 1
+                    itens[':knot:'] -= 1
                     personagem.dinheiro -= valores[2]
+                    sleep(2)
             elif opcao == 'sair':
-                return inventario,personagem
+                return inventario, personagem
             else:
                 print('\033[1;31mOpção Invalida\033[m')
+                sleep(1)
 
 #   FUNÇÃO COM A OPÇÃO DO BAR
 def bar(inventario,personagem):
@@ -159,7 +174,7 @@ def bar(inventario,personagem):
         print ('Bem-Vindo ao Bar:')
         sleep(1)
         while True:
-            status_personagem(inventario)
+            status_personagem(inventario,personagem)
             print("Ações:")
             print("1 - Beber")
             print("2 - voltar para a cidade")
@@ -205,7 +220,7 @@ def hipodromo(inventario,personagem):
         print ('Bem-Vindo a corrida de cavalos:')
         sleep(1)
         while True:
-            status_personagem(inventario)
+            status_personagem(inventario,personagem)
             print("")
             print("Ações:")
             print("1 - Apostar em uma corrida")
@@ -224,13 +239,14 @@ def hipodromo(inventario,personagem):
                         quantia = quantia * (len(cavalos)-1) 
                         personagem.dinheiro += quantia
                         print (f'\033[1;33mParabens, voce ganhou {quantia}\033[m')
-                        sleep(1)
+                        sleep(3)
                     else:
                         print('\033[1;31mVoce perdeu a aposta\033[m')
                         personagem.dinheiro -= quantia
-                        sleep(1)
+                        sleep(2)
                 else:
                     print('Você não tem dinheiro suficiente para fazer essa aposta')
+                    sleep(2)
             elif opcao == '2':
                 return inventario,personagem
             else:
@@ -246,7 +262,7 @@ def restaurante(inventario,personagem):
     else:
         print('Voce entrou no restaurante')
         while True:
-            status_personagem(inventario)
+            status_personagem(inventario,personagem)
             print("Ações:")
             print("1 - Pedir comida")
             print("2 - Vender seu peixe para o restaurante")
@@ -255,20 +271,28 @@ def restaurante(inventario,personagem):
             if opcao == '1':
                 if personagem.dinheiro >= 80:
                     personagem.fome = False
-                    personagem.dinheiro -= 80 
+                    personagem.dinheiro -= 80
+                    print('Você fez uma otima refeição')
+                    sleep(2)
                 else:
-                    print('Você não tem dinheiro sufuciente, o valor é de R$ 80,00')     
-            if opcao == '2':
+                    print('Você não tem dinheiro sufuciente, o valor é de R$ 80,00')  
+                    sleep(2)   
+            elif opcao == '2':
                 opcao = int(input('Quantos peixes quer vender?: '))
                 preco = randint(10,30)
-                print('Voce vendeu', opcao, 'peixes, pelo valor de', preco,'a unidade')
-                valor = opcao * preco
-                personagem.dinheiro += valor  
-                inventario[':fish:'] -= opcao   
+                if opcao <= inventario[':fish:'] or opcao < 0:
+                    print('Voce vendeu', opcao, 'peixes, pelo valor de', preco,'a unidade')
+                    valor = opcao * preco
+                    personagem.dinheiro += valor  
+                    inventario[':fish:'] -= opcao  
+                    sleep(2)  
+                else:
+                    print('Você não tem peixes o suficiente')
+                    sleep(2)
             elif opcao == '3':
                 return inventario,personagem
             else:
-                print('\033[1;31Entrada invalida\033[m')
+                print('\033[1;31mEntrada invalida\033[m')
                 sleep(1)
 
 #   FUNÇÃO QUE MOSTRA AS OPÇÕES QUE A PESSOA TEM NA CIDADE
@@ -276,7 +300,7 @@ def cidade(dict,pessoa):
     inventario = dict
     personagem = pessoa
     while True: ### opcoes do que fazer na cidade
-        status_personagem(inventario)
+        status_personagem(inventario,personagem)
         print()
         print("Voce esta na Cidade")
         print("Ações:")
@@ -337,10 +361,9 @@ def andarNaCaverna(inventario,personagem):
         pass
     return inventario,personagem
 
-
 #   DESCENDO MAIS FUNDO NA CAVERNA
 def descer(inventario,personagem,passos):
-    status_personagem(inventario)
+    status_personagem(inventario,personagem)
     if passos == 6:
         print('Uma precipicio esta a sua frete, porem não é tão fundo.\nVocê consegue ver o fundo dele, porem precisará de algo para descer.')
         sleep(2)
@@ -375,8 +398,9 @@ def caverna(inventario,personagem):
     print()
     sleep(2)
     while True:
-        status_personagem(inventario)
-        inventario,personagem,passos = descer(inventario,personagem,passos)
+        status_personagem(inventario,personagem)
+        if passos == 6:
+            inventario,personagem,passos = descer(inventario,personagem,passos)
         print("Ações:")
         if inventario[':flashlight:'] > 0:
             print("1 - Beber água que está numa poça no canto da caverna")
@@ -406,6 +430,51 @@ def caverna(inventario,personagem):
                 print('Você tentou sair, como estava um nivel abaixo, tentou subir na corda, porem a mesma estava amarrada em uma pedra e arrebentou\nPor sorte você encontrou um cipo e conseguiu subir por ele\nPor isso é bom ter os equipamentos adequados')
                 sleep(4)
             personagem.caverna = False
-            return inventario,personagem
+            break
         else:
             print('\033[1;31mOpção invalida\033[m')
+        return inventario, personagem
+
+#   CACHOEIRA OPÇÃO
+def opcoesDaCachoeira(inventario,personagem,opc):
+    os.system('cls' if os.name == 'nt' else 'clear')
+    if opc == '1':
+        for i in 'Voce esta tomando um bom banho.....':
+            print(f'{i}', end='', flush=True)
+            sleep(0.1)
+        personagem.sujo = False
+        chance = (randint(1,10))
+        if chance == 7:
+            for i in 'Olhando bem nas pedras atras da cachoeira\nVocê visualiza o que parece ser uma passagem para uma caverna ...':
+                print(f'{i}', end='', flush=True)
+                sleep(0.05)
+            while True:
+                choice = str(input('Deseja explorar a caverna ...\nSim ou Não - > ').lower().replace('ã','a'))
+                if choice not in ['sim','nao','s','n']:
+                    print('opção Invalida')
+                elif choice in ['sim','s']:
+                    print('Bem vindo a caverna')
+                    inventario,personagem = caverna(inventario,personagem)
+                    sleep(1)
+                    personagem.cachoeira = True
+                    return inventario,personagem
+                else:
+                    print('Voltando ...')
+                    sleep(1)
+                    return inventario,personagem
+    elif opc == '2':
+        inventario[':fish:'] += 0
+        for i in 'Voce esta pescando.....':
+            print(f'{i}', end='', flush=True)
+            sleep(0.1)
+        chance = (randint(1,10))
+        if chance in [2,5]:
+            inventario[':fish:'] += 2
+            print('Parabens você pegou 2 peixes.')
+        elif chance in [1,3,7]:
+            inventario[':fish:'] += 1
+            print('Você pegou 1 peixe')
+        else:
+            print('Infelizmente não foi dessa vez')
+        sleep(1)
+    return inventario,personagem
