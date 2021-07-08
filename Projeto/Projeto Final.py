@@ -96,7 +96,7 @@ class Personagem:
 #   CLASSE QUE MOSTRA O QUE TEM EM SUA DISPENSA
 class Casa:
     def __init__(self):
-        self.itens = {':flashlight:':1,':knot:':0,':fish:':1,':hook:':0,':wood:':2,':coin:':0,':curry:':0,':chopsticks:':0}
+        self.itens = {':flashlight:':0,':knot:':0,':fish:':1,':hook:':0,':wood:':2,':coin:':0,':curry:':0,':chopsticks:':0}
 
 #   AÇÕES DO USUARIO
 if __name__ == "__main__":
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     casa = Casa()
 
     #   INTRODUÇÃO DA HISTORIA
-    # audiJogo(0,True)
+    audiJogo(0,True)
     # msg = atualStage(personagem.fase)
     # for i in msg:
     #     print(f'{i}', end='',flush=True)
@@ -129,7 +129,7 @@ if __name__ == "__main__":
             break
         personagem.status()
         print("Ações:")
-        opcao = input('1 - Ir para Cachoeira\n2 - Fritar Peixe\n3 - Ir para cidade\n4 - Comer\n' + ('5 - Cortar lenha' if personagem.lenha == False else '\033[1;31mDesabilitado por hoje\033[m') + ('\n\033[1;31mDesabilitado\033[m' if 6 <= relogio.horas <= 16 else '\n6 - Dormir') + '\n0 - Sair do jogo\nEscolha sua ação: ')
+        opcao = input('1 - Ir para Cachoeira\n2 - Fritar Peixe\n3 - Ir para cidade\n4 - Comer\n' + ('5 - Cortar lenha' if personagem.lenha == False else '\033[1;31mDesabilitado por hoje\033[m') + ('\n\033[1;31mDesabilitado\033[m' if 6 <= relogio.horas <= 16 else '\n6 - Dormir') + '\n7 - Creditos\n0 - Sair do jogo\nEscolha sua ação: ')
 
         #   OPÇÃO DA CACHOEIRA
         if opcao == '1':
@@ -200,6 +200,8 @@ if __name__ == "__main__":
             if not personagem.dormiu:
                 print("Como você não dormiu, acabou pegando no sono antes de cortar a lenha.")
                 lenha = 0
+                sleep(3)
+                personagem.dormir()
             elif personagem.teorAlcolico > 90:
                 print('Você bebeu de mais, alem de não produzir nada ainda adormeceu na floresta e os animais selvagem o atacaram.')
                 sleep(2)
@@ -220,7 +222,7 @@ if __name__ == "__main__":
                 lenha = (randint(4,10)//2)
             print(f'Você produziu {lenha} lenhas hoje')
             print("-=-=-")
-            sleep(3)
+            sleep(5)
             relogio.avancaTempo(360)
             casa.itens[':wood:'] += lenha
             personagem.banho = True
@@ -263,6 +265,10 @@ if __name__ == "__main__":
             personagem.dormir()
             audiJogo(4)
 
+        #   CHAMA OS CREDITOS DO JOGO    
+        elif opcao == '7':
+            creditosFinais()
+
         #   OPÇÃO DE SAIR DO PROGRAMA
         elif opcao == '0':
             break
@@ -273,4 +279,5 @@ if __name__ == "__main__":
         sleep(1)
         os.system('cls' if os.name == 'nt' else 'clear')
 
-print('Jogo produzido por:\nDanusa\nNilson\nVinicius\nWanderson')
+creditosFinais()
+print('Ate uma nova versão')
