@@ -1,6 +1,8 @@
 #   IMPORTAÇÃO DAS BIBLIOTECAS NECESSARIAS PARA O PROGRAMA
 from random import choice
 from time import sleep
+
+import emoji
 from stage_level import *
 from emoji import emojize
 import os
@@ -116,6 +118,7 @@ if __name__ == "__main__":
 
     #   REPETIÇÃO DAS AÇÕES UTILZADAS PELO USUARIO
     while True:
+        audiJogo(4,True)
         dia_controle = 1
         if dia_controle != relogio.dia and personagem.aluguel == True:
             personagem.dinheiro -= 200
@@ -170,6 +173,7 @@ if __name__ == "__main__":
     
         #   OPÇÃO DE IR PARA CIDADE
         elif opcao == '3':
+            audiJogo(1,True)
             casa.itens,personagem = cidade(casa.itens,personagem)
             relogio.avancaTempo(180)
 
@@ -187,6 +191,7 @@ if __name__ == "__main__":
 
         #   AÇÕES QUANDO O USUARIO ESCOLHER CORTAR A LENHA
         elif opcao == '5' and personagem.lenha == False:
+            audiJogo(5,True)
             print("-=-=-")
             print("Você foi cortar madeira.")
             print(personagem)
@@ -195,6 +200,11 @@ if __name__ == "__main__":
             if not personagem.dormiu:
                 print("Como você não dormiu, acabou pegando no sono antes de cortar a lenha.")
                 lenha = 0
+            elif personagem.teorAlcolico > 90:
+                print('Você bebeu de mais, alem de não produzir nada ainda adormeceu na floresta e os animais selvagem o atacaram.')
+                sleep(2)
+                personagem.vidas -= 1
+                personagem.dormir()
             elif personagem.bebado:
                 print('Você estava muito bebado e não produziu nada, e nem se lembra de como voltou para casa')
                 lenha = 0
@@ -216,6 +226,7 @@ if __name__ == "__main__":
             personagem.banho = True
             personagem.sujo = True
             personagem.lenha = True
+            audiJogo(5)
 
             # OPÇÃO QUANDO UM COMPRADOR APARECER
             comprador = randint(1,4)
@@ -250,6 +261,7 @@ if __name__ == "__main__":
         #   DORMIR
         elif opcao == '6':
             personagem.dormir()
+            audiJogo(4)
 
         #   OPÇÃO DE SAIR DO PROGRAMA
         elif opcao == '0':
