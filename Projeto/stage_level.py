@@ -4,7 +4,7 @@ from random import randint,choice
 from emoji import emojize
 import os
 
-def status_pesonagem(inventario):
+def status_personagem(inventario):
     os.system('cls' if os.name == 'nt' else 'clear')
     print('==='*30)
     for k,v in inventario.items():
@@ -25,7 +25,7 @@ def audiJogo(musica,play=False):
 
 #   FRASES DE INICIO DE ESTAGIO
 def atualStage(atual):
-    frases = ['Cansado da cidade você revolve vender tudo e viver uma vida simples.\nEm um lugar isolado, compra uma casinha rodeada de floresta.\nComeça então a viver sem tecnologia.','Apos um de seus banhos durante dia\nVocê descobre por acaso essa caverna, escura e fria\nCom muito medo e receio você começa a explorar esse novo local.']
+    frases = ['Cansado da cidade você revolve vender tudo e viver uma vida simples.\nEm um lugar isolado, compra uma casinha rodeada de floresta.\nComeça então a viver sem tecnologia.','Apos um de seus banhos durante dia\nVocê descobre por acaso essa caverna, escura e fria\nCom muito medo e receio você começa a explorar esse novo local.','Bem-Vindo Caverna Misteriosa\nVoce chega na caverna e sente que existe um ar de mistério...\nA caverna esta um pouco escura...' ]
     return frases[atual]
 
 #   AUDIO DE CAMINHADA COM PRINT DE FRASE
@@ -88,7 +88,7 @@ def opcoesDaCachoeira(opc):
 def loja_Vazia(inventario,personagem):
     aluguel_loja = 200
     while True:
-        status_pesonagem(inventario)
+        status_personagem(inventario)
         print(f'Esta loja esta disponivel para alugar por {aluguel_loja} o dia')
         print('Ações')
         print('1 - alugar')
@@ -116,7 +116,7 @@ def mercearia(inventario,personagem):
         sleep(1)
         while True:
             index = 0
-            status_pesonagem(inventario)
+            status_personagem(inventario)
             print('Digite o numero do item que deseja comprar, ou digite "sair", para deixar a loja: ')
             print(f"{'Numero':<6}   {'Item':<4} {'Quantidade':<15}{'Valor':<6}")
             for k,v in itens.items():
@@ -159,7 +159,7 @@ def bar(inventario,personagem):
         print ('Bem-Vindo ao Bar:')
         sleep(1)
         while True:
-            status_pesonagem(inventario)
+            status_personagem(inventario)
             print("Ações:")
             print("1 - Beber")
             print("2 - voltar para a cidade")
@@ -205,7 +205,7 @@ def hipodromo(inventario,personagem):
         print ('Bem-Vindo a corrida de cavalos:')
         sleep(1)
         while True:
-            status_pesonagem(inventario)
+            status_personagem(inventario)
             print("")
             print("Ações:")
             print("1 - Apostar em uma corrida")
@@ -216,7 +216,7 @@ def hipodromo(inventario,personagem):
                     print(f'[{i}]',end= ' ')
                 print()
                 aposta = input(f'Em qual cavalo deseja apostar? (digite corretamente o nome do cavalo) ').title().strip()
-                quantia = int(input('qual quantia deseja apostar?\/ Maximo de \033[1;32m{personagem.dinheiro}\033[m\n'))
+                quantia = int(input(f'qual quantia deseja apostar? Maximo de \033[1;32m{personagem.dinheiro}\033[m\n'))
                 if quantia <= personagem.dinheiro:
                     vencedor = choice(cavalos) ## escolhe por aleatoriedade do cavalo vencedor
                     print(f'O cavalo vencedor foi {vencedor}')
@@ -246,7 +246,7 @@ def restaurante(inventario,personagem):
     else:
         print('Voce entrou no restaurante')
         while True:
-            status_pesonagem(inventario)
+            status_personagem(inventario)
             print("Ações:")
             print("1 - Pedir comida")
             print("2 - Vender seu peixe para o restaurante")
@@ -276,7 +276,7 @@ def cidade(dict,pessoa):
     inventario = dict
     personagem = pessoa
     while True: ### opcoes do que fazer na cidade
-        status_pesonagem(inventario)
+        status_personagem(inventario)
         print()
         print("Voce esta na Cidade")
         print("Ações:")
@@ -285,7 +285,7 @@ def cidade(dict,pessoa):
         print("3 - Bar")
         print("4 - Mercearia")
         print("5 - Loja vazia")
-        print("6 voltar para casa")
+        print("6 - voltar para casa")
         opcao = input("Escolha sua ação: ")
 
         if opcao == '1':
@@ -307,3 +307,105 @@ def cidade(dict,pessoa):
         else:
             print('\033[1;31Entrada invalida\033[m')
             sleep(1)
+
+#   ANDAR NA CAVERNA
+def andarNaCaverna(inventario,personagem):
+
+    chance = randint(1,4)
+    if chance == 2 and inventario[':flashlight:'] >0:
+        for i in 'Algo brilhante esta mais adiante......':
+            print(f'{i}',end='',flush=True)
+            sleep(0.05)
+        while True:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            pergunta = input('Você esta de frente ao objeto brilhante .....\nGostaria de pegar e ver o que é ?\n1 - Pegar o objeto\n2 - Não pegar o Objeto').strip()
+            if pergunta == '1':
+                chance = randint(1,5)
+                if chance == 3:
+                    print('Realmente incrivel, você achou uma pepita de ouro e ainda ganhou uma VIDA')
+                    personagem.vidas += 1
+                    inventario[':coin:'] += 1
+                    break
+                elif chance == 5:
+                    print('\033[1;31mQUE FALTA DE SORTE\033[m\nO que estava brilhando era um ferro enferrujado e você acabou pegando tetano')
+                    personagem.vidas -= 1
+                    break
+                else:
+                    print('No fim das contas não era nada de mais.')
+            sleep(3)
+    else:
+        pass
+    return inventario,personagem
+
+
+#   DESCENDO MAIS FUNDO NA CAVERNA
+def descer(inventario,personagem,passos):
+    status_personagem(inventario)
+    if passos == 6:
+        print('Uma precipicio esta a sua frete, porem não é tão fundo.\nVocê consegue ver o fundo dele, porem precisará de algo para descer.')
+        sleep(2)
+        while True:
+            opcao = input('1 - Descer\n2 - Sair\n --> ')
+            if opcao == '1' and inventario[':knot:'] > 0:
+                print('Você esta descendo um nivel.')
+                print('Porem, não conseguirá explorar tudo, por não ter todos os itens necessario...')
+                sleep(2)
+                if inventario[':knot:'] > 0 and inventario[':hook:'] > 0:
+                    pass
+                elif inventario[':knot:'] > 0 and inventario[':hook:'] == 0:
+                    inventario[':knot:'] -= 1
+                passos = 0
+                personagem.nivelCaverna += 1
+                return inventario,personagem,passos
+            elif opcao == '2':
+                passos = 0
+                return inventario,personagem,passos
+            else:
+                 print('\033[1;31mOpção invalida\033[m')
+                 sleep(1)
+
+#   OPÇÕES DA CAVERNA
+def caverna(inventario,personagem): 
+    passos = 0
+    frase = atualStage(2)
+    audiJogo(0,True)
+    for i in frase:
+        print(f'{i}',end='',flush=True)
+    audiJogo(0)
+    print()
+    sleep(2)
+    while True:
+        status_personagem(inventario)
+        inventario,personagem,passos = descer(inventario,personagem,passos)
+        print("Ações:")
+        if inventario[':flashlight:'] > 0:
+            print("1 - Beber água que está numa poça no canto da caverna")
+            print("2 - Explorar a caverna")
+            print("3 - Sair da Caverna")
+        else:
+            print("1 - ")
+            print("2 - ")
+            print("3 - Sair da Caverna")    
+        opcao = input("Esolha uma ação: ")
+        if opcao == '1':
+            print('A Água que eu bebi é pura e limpa, que ótimo me sinto muito saudável')
+            sleep(2)
+            chance = randint(1,4)
+            if chance == 2:
+                personagem.vidas += 1
+        elif opcao == '2':
+            audiJogo(3,True)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print('Estou andando na caverna e sinto que posso encontrar algo valioso aqui')
+            sleep(3)
+            inventario, personagem = andarNaCaverna(inventario,personagem)
+            audiJogo(0)
+            passos += 1
+        elif opcao == '3':
+            if personagem.nivelCaverna == 1 and inventario[':hook:'] == 0 :
+                print('Você tentou sair, como estava um nivel abaixo, tentou subir na corda, porem a mesma estava amarrada em uma pedra e arrebentou\nPor sorte você encontrou um cipo e conseguiu subir por ele\nPor isso é bom ter os equipamentos adequados')
+                sleep(4)
+            personagem.caverna = False
+            return inventario,personagem
+        else:
+            print('\033[1;31mOpção invalida\033[m')
