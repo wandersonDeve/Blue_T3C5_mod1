@@ -20,6 +20,7 @@ def status_personagem(inventario,personagem):
     return
 
 def creditosFinais():
+    os.system('cls' if os.name == 'nt' else 'clear')
     texto = '\033[1;33mJOGO DE FICÇÃO INTERATIVA\033[m\n\nProduzido por:\nDanusa Silva de Jesus\nNilson Reis Xavier\nVinicius da Silva Florencio\nWanderson Gomes dos Santos\n\nProjeto desenvolvido para o final do modulo 1 na BlueEdtech'
     for i in texto:
         print(f'{i}',end='',flush=True)
