@@ -6,7 +6,7 @@ import os
 
 def status_personagem(inventario,personagem):
     os.system('cls' if os.name == 'nt' else 'clear')
-    print("--"*30)
+    print("---"*30)
     print(emojize(f':dollar: R$ {personagem.dinheiro}', use_aliases=True), end='    ')
     print(emojize(f'Vidas: ' + '\033[1;31m:red_heart:\033[m '*personagem.vidas,use_aliases=True))
     print('==='*30)
@@ -20,7 +20,7 @@ def status_personagem(inventario,personagem):
 
 #   TRILHA SONORA E AUDIOS DO JOGO
 def audiJogo(musica,play=False):
-    musicas = ['sons/typewriter.mp3','sons/caminhando_normal.mp3','sons/cachoeira.mp3']
+    musicas = ['sons/typewriter.mp3','sons/caminhando_normal.mp3','sons/cachoeira.mp3','sons/walk_slow.mp3']
     if play:
         mixer.init()
         mixer.music.load(musicas[musica])
@@ -334,15 +334,15 @@ def cidade(dict,pessoa):
 
 #   ANDAR NA CAVERNA
 def andarNaCaverna(inventario,personagem):
-
     chance = randint(1,4)
     if chance == 2 and inventario[':flashlight:'] >0:
         for i in 'Algo brilhante esta mais adiante......':
             print(f'{i}',end='',flush=True)
             sleep(0.05)
+            sleep(1)
         while True:
             os.system('cls' if os.name == 'nt' else 'clear')
-            pergunta = input('Você esta de frente ao objeto brilhante .....\nGostaria de pegar e ver o que é ?\n1 - Pegar o objeto\n2 - Não pegar o Objeto').strip()
+            pergunta = input('Você esta de frente ao objeto brilhante .....\nGostaria de pegar e ver o que é ?\n1 - Pegar o objeto\n2 - Não pegar o Objeto\n--> ').strip()
             if pergunta == '1':
                 chance = randint(1,5)
                 if chance == 3:
@@ -357,8 +357,6 @@ def andarNaCaverna(inventario,personagem):
                 else:
                     print('No fim das contas não era nada de mais.')
             sleep(3)
-    else:
-        pass
     return inventario,personagem
 
 #   DESCENDO MAIS FUNDO NA CAVERNA
@@ -371,11 +369,11 @@ def descer(inventario,personagem,passos):
             opcao = input('1 - Descer\n2 - Sair\n --> ')
             if opcao == '1' and inventario[':knot:'] > 0:
                 print('Você esta descendo um nivel.')
-                print('Porem, não conseguirá explorar tudo, por não ter todos os itens necessario...')
                 sleep(2)
                 if inventario[':knot:'] > 0 and inventario[':hook:'] > 0:
                     pass
                 elif inventario[':knot:'] > 0 and inventario[':hook:'] == 0:
+                    print('Porem, não conseguirá explorar tudo, por não ter todos os itens necessario...')
                     inventario[':knot:'] -= 1
                 passos = 0
                 personagem.nivelCaverna += 1
@@ -416,7 +414,13 @@ def caverna(inventario,personagem):
             sleep(2)
             chance = randint(1,4)
             if chance == 2:
-                personagem.vidas += 1
+                if personagem.vidas < 5:
+                    print('Parabens você ganhou uma vida')
+                    print(2)
+                    personagem.vidas += 1
+                else:
+                    print('Agora que matei minha sede posso continuar a explorar essa caverna')
+                    print(2)
         elif opcao == '2':
             audiJogo(3,True)
             os.system('cls' if os.name == 'nt' else 'clear')
@@ -429,11 +433,16 @@ def caverna(inventario,personagem):
             if personagem.nivelCaverna == 1 and inventario[':hook:'] == 0 :
                 print('Você tentou sair, como estava um nivel abaixo, tentou subir na corda, porem a mesma estava amarrada em uma pedra e arrebentou\nPor sorte você encontrou um cipo e conseguiu subir por ele\nPor isso é bom ter os equipamentos adequados')
                 sleep(4)
-            personagem.caverna = False
-            break
+            elif personagem.nivelCaverna == 1 and inventario[':hook:'] > 0 and inventario[':knot:'] > 0:
+                print('Você saiu do nivel 1 da caverna para perto da saida')
+                sleep(2)
+            else:
+                personagem.caverna = False
+                break
         else:
             print('\033[1;31mOpção invalida\033[m')
-        return inventario, personagem
+            sleep(1)
+    return inventario, personagem
 
 #   CACHOEIRA OPÇÃO
 def opcoesDaCachoeira(inventario,personagem,opc):
@@ -443,7 +452,7 @@ def opcoesDaCachoeira(inventario,personagem,opc):
             print(f'{i}', end='', flush=True)
             sleep(0.1)
         personagem.sujo = False
-        chance = (randint(1,10))
+        chance = 7
         if chance == 7:
             for i in 'Olhando bem nas pedras atras da cachoeira\nVocê visualiza o que parece ser uma passagem para uma caverna ...':
                 print(f'{i}', end='', flush=True)
@@ -453,7 +462,6 @@ def opcoesDaCachoeira(inventario,personagem,opc):
                 if choice not in ['sim','nao','s','n']:
                     print('opção Invalida')
                 elif choice in ['sim','s']:
-                    print('Bem vindo a caverna')
                     inventario,personagem = caverna(inventario,personagem)
                     sleep(1)
                     personagem.cachoeira = True

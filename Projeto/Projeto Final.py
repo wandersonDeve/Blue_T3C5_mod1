@@ -9,20 +9,29 @@ import os
 class Relogio:
     def __init__(self):
         self.horas = 6
-        self.minutos = 0
+        self.__minutos = 0
         self.dia = 1
     
     def __str__(self):
         return f"{self.horas:02d}:{self.minutos:02d}"
+
+    @property
+    def minutos(self):
+        return self.__minutos
+
+    @minutos.setter
+    def minutos(self,novo_tempo):
+        raise ValueError('Impossivel alterar o tempo dessa forma, use a função avancaTempo().')
     
     def avancaTempo(self, minutos):
-        self.minutos += minutos
-        while self.minutos >= 60:
-            self.minutos -= 60
+        self.__minutos += minutos
+        while self.__minutos >= 60:
+            self.__minutos -= 60
             self.horas += 1
         while self.horas == 24:
             self.horas -= 24
             self.dia += 1
+            personagem.dormiu = False
 
     
     def atrasado(self):
@@ -68,7 +77,7 @@ class Personagem:
 
     #   FUNÇÃO COM STATUS DO PERSONAGEM
     def status(self):
-        print("--"*30)
+        print("---"*30)
         print(emojize(f':alarm_clock: {relogio}', use_aliases=True),end='    ')
         print(emojize(f':calendar: Dia {relogio.dia}', use_aliases=True),end='    ')
         print(emojize(f':dollar: R$ {personagem.dinheiro}', use_aliases=True), end='    ')
@@ -89,6 +98,7 @@ class Casa:
 
 #   AÇÕES DO USUARIO
 if __name__ == "__main__":
+    os.system('cls' if os.name == 'nt' else 'clear')
     relogio = Relogio()
     personagem = Personagem()
     casa = Casa()
