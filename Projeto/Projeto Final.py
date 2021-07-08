@@ -42,10 +42,10 @@ class Relogio:
 #   CLASSE QUE SERA RESPONSAVEL PELO PESONAGEM
 class Personagem:
     def __init__(self):
-        self.sujo = False # MODIFICAR ANTES DE ENVIAR
+        self.sujo = True
         self.fome = True
         self.lenha = False
-        self.dinheiro = 3000 #### MODIFICAR VALOR NO FINAL DO CODIGO ####
+        self.dinheiro = 0
         self.fase = 0
         self.banho = True
         self.viuMensagem = False
@@ -107,14 +107,14 @@ if __name__ == "__main__":
 
     #   INTRODUÇÃO DA HISTORIA
     audiJogo(0,True)
-    # msg = atualStage(personagem.fase)
-    # for i in msg:
-    #     print(f'{i}', end='',flush=True)
-    #     sleep(0.05)
-    # audiJogo(0)
-    # personagem.viuMensagem = True
-    # sleep(1)
-    # os.system('cls' if os.name == 'nt' else 'clear')
+    msg = atualStage(personagem.fase)
+    for i in msg:
+        print(f'{i}', end='',flush=True)
+        sleep(0.05)
+    audiJogo(0)
+    personagem.viuMensagem = True
+    sleep(1)
+    os.system('cls' if os.name == 'nt' else 'clear')
 
     #   REPETIÇÃO DAS AÇÕES UTILZADAS PELO USUARIO
     while True:
