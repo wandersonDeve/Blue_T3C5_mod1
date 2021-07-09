@@ -1,0 +1,8 @@
+PARA INSTALAR AS DEPENDECIAS USE OS CODIGOS ABAIXO
+
+- abra a pasta onde foi extraido o conteudo e abra com o VSCode
+
+- abra o terminal do VSCode e digite o codigo abaixo:
+pip install -r requirements.txt
+
+agora basta executar o arquivo principal - Projeto Final
