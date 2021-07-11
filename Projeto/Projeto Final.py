@@ -45,7 +45,7 @@ class Personagem:
         self.sujo = True
         self.fome = True
         self.lenha = False
-        self.dinheiro = 0
+        self.dinheiro = 3000
         self.fase = 0
         self.banho = True
         self.viuMensagem = False
@@ -204,8 +204,8 @@ if __name__ == "__main__":
                 personagem.dormir()
             elif personagem.teorAlcolico > 90:
                 print('Você bebeu de mais, alem de não produzir nada ainda adormeceu na floresta e os animais selvagem o atacaram.')
-                sleep(2)
                 personagem.vidas -= 1
+                sleep(2)
                 personagem.dormir()
             elif personagem.bebado:
                 print('Você estava muito bebado e não produziu nada, e nem se lembra de como voltou para casa')

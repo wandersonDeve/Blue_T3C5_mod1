@@ -390,7 +390,7 @@ def descer(inventario,personagem,passos):
             creditosFinais()
         else:
             print('Uma precipicio esta a sua frete, porem não é tão fundo.\nVocê consegue ver o fundo dele, porem precisará de algo para descer.')
-            sleep(2)
+            sleep(3)
             while True:
                 opcao = input('1 - Descer\n2 - Sair\n --> ')
                 if opcao == '1':
